@@ -6,7 +6,11 @@ interface RepoProps {
 }
 
 async function fetchRepo(name: string) {
-  const response = await fetch(`https://api.github.com/repos/eleerogers/${name}`)
+  const response = await fetch(`https://api.github.com/repos/eleerogers/${name}`, {
+    next: {
+      revalidate: 60
+    }
+  })
   const repo = await response.json()
   return repo
 }

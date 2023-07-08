@@ -11,7 +11,11 @@ interface Content {
 
 async function fetchRepoContents(name: string) {
   await new Promise(resolve => setTimeout(resolve, 2500))
-  const response = await fetch(`https://api.github.com/repos/eleerogers/${name}/contents`)
+  const response = await fetch(`https://api.github.com/repos/eleerogers/${name}/contents`, {
+    next: {
+      revalidate: 60
+    }
+  })
   const contents = await response.json()
   return contents
 }

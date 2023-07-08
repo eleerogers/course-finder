@@ -3,7 +3,11 @@ import { FaStar, FaCodeBranch, FaEye } from "react-icons/fa"
 import { Repo } from "@/models/repos"
 
 async function fetchRepos() {
-  const response = await fetch('https://api.github.com/users/eleerogers/repos')
+  const response = await fetch('https://api.github.com/users/eleerogers/repos', {
+    next: {
+      revalidate: 60
+    }
+  })
   const repos: Repo[] = await response.json()
   return repos
 }
