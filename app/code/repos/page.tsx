@@ -1,23 +1,27 @@
+"use client"
+
 import Link from "next/link"
 import { FaStar, FaCodeBranch, FaEye } from "react-icons/fa"
 import { Repo } from "@/models/repos"
+import { useEffect, useState } from "react"
+import SearchBar from "@/app/components/SearchBar"
 
-async function fetchRepos() {
-  const response = await fetch('https://api.github.com/users/eleerogers/repos', {
-    next: {
-      revalidate: 60
+
+const ReposPage = () => {
+  const [ repos, setRepos ] = useState<Repo[]>([])
+  useEffect(() => {
+    const fetchRepos = async () => {
+      const response = await fetch('https://api.github.com/users/eleerogers/repos')
+      const repos: Repo[] = await response.json()
+      setRepos(repos)
     }
-  })
-  const repos: Repo[] = await response.json()
-  return repos
-}
-
-const ReposPage = async () => {
-  const repos = await fetchRepos();
+    fetchRepos()
+  }, [])
 
   return (
     <div className="repos-container">
       <h2>Repositories</h2>
+      <SearchBar repos={repos} setRepos={setRepos} />
       <ul className="repo-list">
         { repos.map(repo => (
           <li key={repo.id}>
